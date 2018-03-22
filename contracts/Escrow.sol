@@ -1,57 +1,46 @@
-
 pragma solidity ^0.4.17;
+
+contract EscrowFactory {
+    event EscrowCreated(address newAddress);
+
+    function EscrowFactory() public {}
+
+    function createEscrow(address seller) public payable {
+        address addr = address((new Escrow).value(msg.value)(seller));
+        emit EscrowCreated(addr);
+    }
+
+}
 
 contract Escrow {
     address public buyer;
     address public seller;
-    uint createdAt;
-    uint buyerOk;
-    uint sellerOk;
+    bool public buyerOk = false;
+    bool public sellerOk = false;
+    uint createdAt = 0;
 
-    function Escrow(address _seller, address _sender) public payable {
-        buyer = _sender;
+    function Escrow(address _seller) public payable {
+        require(_seller != 0);
+        buyer = msg.sender;
         seller = _seller;
-        createdAt = block.timestamp;
+        createdAt = now;
     }
 
-    function accept() public {
-        if (msg.sender == buyer) {
-            //TODO: Handle buyerOK
-            buyerOk = now;
-        } 
+    function accept(bool _accepted) public {
+        require(msg.sender == buyer || msg.sender == seller);
+        
+        if (_accepted == false) {
+            selfdestruct(buyer);
+        }
 
         if (msg.sender == seller) {
-            // TODO: Seller Ok
-            sellerOk = now;
-
-        }
-        if (buyerOk != 0 && sellerOk != 0) {
-            seller.send(this.balance);
+            sellerOk = _accepted;
+        } else {
+            buyerOk = _accepted;
         }
 
-    } 
-
-    function reject() public {
-        if (msg.sender == buyer) {
-            //TODO: Handle buyerOK
-            buyerOk = 0;
-        } 
-
-        if (msg.sender == seller) {
-            // TODO: Seller Ok
-            sellerOk = 0;
+        if(sellerOk && buyerOk) {
+            selfdestruct(seller);
         }
-    }
-}
-
-contract EscrowFactory {
-    event EscrowCreated(address newAddess);
-
-    function EscrowFactory() public {}
-
-    function createEscrow(address seller) public {
-
-        address newAddress = address((new Escrow).value(msg.value)(msg.sender,seller));
-        EscrowCreated(newAddress);
     }
 }
