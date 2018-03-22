@@ -7,9 +7,9 @@ contract EscrowFactory {
 
     function createEscrow(address seller) public payable {
         address addr = address((new Escrow).value(msg.value)(seller));
-        emit EscrowCreated(addr);
-    }
 
+        EscrowCreated(addr);
+    }
 }
 
 contract Escrow {
