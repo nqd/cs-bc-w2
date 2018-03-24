@@ -15,4 +15,8 @@ module.exports = function (deployer) {
     EscrowFactory,
     { from: web3.eth.accounts[4] }
   )
+  deployer.deploy(
+    Store,
+    { from: web3.eth.accounts[4] }
+  )
 }
