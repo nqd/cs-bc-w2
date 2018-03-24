@@ -8,10 +8,13 @@ import { default as contract } from 'truffle-contract'
 // Import our contract artifacts and turn them into usable abstractions.
 import escrow_artifacts from '../../build/contracts/EscrowFactory.json'
 import escrow_contract from '../../build/contracts/Escrow.json'
+import store_artifacts from '../../build/contracts/Store.json'
 
 // escrow is our usable abstraction, which we'll use through the code below.
 var EscrowFactory = contract(escrow_artifacts);
 var Escrow = contract(escrow_contract);
+var Store = contract(store_artifacts)
+
 // The following code is simple to show off interacting with your contracts.
 // As your needs grow you will likely need to change its form and structure.
 // For application bootstrapping, check out window.addEventListener below.
@@ -51,11 +54,28 @@ window.App = {
       })
     });
 
-    $('#create-escrow').on('click', function(e) {
+    // get all the stores
+    Store.setProvider(web3.currentProvider);
+    renderStore();
+
+
+    $('#create-escrow').on('click', function (e) {
       createEscrow();
     });
   },
 };
+
+async function renderStore() {
+  console.log("render store")
+  let i = await Store.deployed();
+  let product = await i.getProduct.call(0)
+  console.log(product)
+  $("#product-list").append(buildProduct(product))
+}
+
+function buildProduct(p) {
+  return `<div><h1>${p[1]}</h1></div>`
+}
 
 let createEscrow = async function () {
   var amount = parseInt($("#amount").val());
@@ -65,7 +85,7 @@ let createEscrow = async function () {
 
   let instance = await EscrowFactory.deployed();
   let createdContract = await instance.createEscrow(seller, { from: account, gas: 1000000, value: web3.toWei(amount, 'ether') });
-  
+
   // Update UI status here.
 }
 
@@ -76,9 +96,9 @@ window.addEventListener('load', function () {
     // Use Mist/MetaMask's provider
     window.web3 = new Web3(web3.currentProvider);
   } else {
-    console.warn("No web3 detected. Falling back to http://127.0.0.1:9545. You should remove this fallback when you deploy live, as it's inherently insecure. Consider switching to Metamask for development. More info here: http://truffleframework.com/tutorials/truffle-and-metamask");
+    console.warn("No web3 detected. Falling back to http://127.0.0.1:7545. You should remove this fallback when you deploy live, as it's inherently insecure. Consider switching to Metamask for development. More info here: http://truffleframework.com/tutorials/truffle-and-metamask");
     // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
-    window.web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:9545"));
+    window.web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
   }
 
   App.start();
