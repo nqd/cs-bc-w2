@@ -7,13 +7,16 @@ contract('Escrow', function (accounts) {
       inst = instance
       return inst.buyer()
     }).then(function (buyer) {
-      console.log('buyer = ', buyer)
       assert.equal(buyer, accounts[6])
-      // assert.equal(inst.buyer(), accounts[6])
-      // assert.equal(inst.sellerOk.call(), false)
-      // assert.equal(inst.buyerOk.call(), false)
-      // assert.equal(inst.buyer(), accounts[6])
-      // assert.equal(inst.seller(), accounts[5])
-    });
-  });
-});
+      return inst.seller()
+    }).then(seller => {
+      assert.equal(seller, accounts[5])
+      return inst.sellerOk()
+    }).then(sellerOk => {
+      assert.equal(sellerOk, false)
+      return inst.buyerOk()
+    }).then(buyerOk => {
+      assert.equal(buyerOk, false)
+    })
+  })
+})
