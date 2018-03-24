@@ -1,5 +1,5 @@
 var Web3 = require("../node_modules/web3/")
-web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:7545"));
+web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:9545"));
 
 var Escrow = artifacts.require("Escrow")
 var EscrowFactory = artifacts.require("EscrowFactory")

@@ -68,7 +68,7 @@ window.App = {
 async function renderStore() {
   console.log("render store")
   let i = await Store.deployed();
-  let product = await i.getProduct.call(0)
+  let product = await i.getProduct.call(1)
   console.log(product)
   $("#product-list").append(buildProduct(product))
 }
@@ -96,9 +96,9 @@ window.addEventListener('load', function () {
     // Use Mist/MetaMask's provider
     window.web3 = new Web3(web3.currentProvider);
   } else {
-    console.warn("No web3 detected. Falling back to http://127.0.0.1:7545. You should remove this fallback when you deploy live, as it's inherently insecure. Consider switching to Metamask for development. More info here: http://truffleframework.com/tutorials/truffle-and-metamask");
+    console.warn("No web3 detected. Falling back to http://127.0.0.1:9545. You should remove this fallback when you deploy live, as it's inherently insecure. Consider switching to Metamask for development. More info here: http://truffleframework.com/tutorials/truffle-and-metamask");
     // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
-    window.web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
+    window.web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:9545"));
   }
 
   App.start();
