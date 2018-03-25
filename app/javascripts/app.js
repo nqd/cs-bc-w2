@@ -74,30 +74,39 @@ window.App = {
     let reader;
     $("#product-image").on("change", (event) => {
       const file = event.target.files[0];
-      console.log('file', file)
       reader = new window.FileReader();
       reader.readAsArrayBuffer(file)
     })
 
     $("#add-product-form").on("submit", e => {
-      console.log(reader)
       e.preventDefault();
-      saveProduct(reader, $("#product-name").val());
+      saveProduct(reader,
+        $("#product-name").val(),
+        $("#product-category").val(),
+        $("#product-description").val(),
+        parseFloat($("#product-price").val())
+      );
     })
   },
 };
 
-async function saveProduct(fileReader, productName) {
+async function saveProduct(
+  fileReader,
+  productName,
+  productCategory,
+  productDescription,
+  productPrice
+) {
   let response = await saveImageOnIpfs(fileReader);
   let imageId = response[0].hash;
 
   let i = await Store.deployed();
   let res = await i.addProduct(
     productName,
-    "category",
+    productCategory,
     imageId,
-    "description",
-    web3.toWei(1, "ether"),
+    productDescription,
+    web3.toWei(productPrice, "ether"),
     { from: web3.eth.accounts[0], gas: 4700000 }
   );
 
@@ -111,7 +120,7 @@ function saveImageOnIpfs(reader) {
 async function renderStore() {
   console.log("render store")
   let i = await Store.deployed();
-  let product = await i.getProduct.call(2)
+  let product = await i.getProduct.call(3)
   console.log(product)
   $("#product-list").append(buildProduct(product))
 }
