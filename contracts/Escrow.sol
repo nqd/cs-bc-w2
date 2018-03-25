@@ -1,26 +1,33 @@
 pragma solidity ^0.4.17;
 
 contract EscrowFactory {
+    address public provider;
+
     event EscrowCreated(address newAddress);
 
-    function EscrowFactory() public {}
+    function EscrowFactory() public {
+        provider = msg.sender;
+    }
 
     function createEscrow(address seller) public payable {
-        address addr = address((new Escrow).value(msg.value)(seller));
+        address addr = address((new Escrow).value(msg.value)(provider, seller));
 
         EscrowCreated(addr);
     }
 }
 
 contract Escrow {
+    address public provider;
     address public buyer;
     address public seller;
     bool public buyerOk = false;
     bool public sellerOk = false;
     uint createdAt = 0;
 
-    function Escrow(address _seller) public payable {
+    function Escrow(address _provider, address _seller) public payable {
         require(_seller != 0);
+        require(_provider != 0);
+        provider = _provider;
         buyer = msg.sender;
         seller = _seller;
         createdAt = now;
@@ -39,8 +46,13 @@ contract Escrow {
             buyerOk = _accepted;
         }
 
-        if(sellerOk && buyerOk) {
-            selfdestruct(seller);
+        if (sellerOk && buyerOk) {
+            release();
         }
+    }
+
+    function release() internal {
+        provider.transfer(this.balance / 100); // 1% fee
+        selfdestruct(seller);
     }
 }

@@ -8,15 +8,16 @@ var Store = artifacts.require("Store")
 module.exports = function (deployer) {
   deployer.deploy(
     Escrow,
+    web3.eth.accounts[0], // provider
     web3.eth.accounts[5],
-    { from: web3.eth.accounts[6], value: web3.toWei(1) }
+    { from: web3.eth.accounts[6], value: web3.toWei(10) }
   )
   deployer.deploy(
     EscrowFactory,
-    { from: web3.eth.accounts[4] }
+    { from: web3.eth.accounts[0] }
   )
   deployer.deploy(
     Store,
-    { from: web3.eth.accounts[4] }
+    { from: web3.eth.accounts[0] }
   )
 }

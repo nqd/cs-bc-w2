@@ -2,10 +2,11 @@ var Escrow = artifacts.require("Escrow");
 var EscrowFactory = artifacts.require("EscrowFactory");
 
 contract('Escrow', function (accounts) {
+  const provider = accounts[0]
   const buyer = accounts[6]
   const seller = accounts[5]
 
-  it.skip("should create new contract", function () {
+  it("should create new contract", function () {
     let inst
     return Escrow.deployed().then(function (instance) {
       inst = instance
@@ -24,7 +25,7 @@ contract('Escrow', function (accounts) {
     })
   })
 
-  it.skip('should allow both user aggree on the contract', () => {
+  it('should allow both user aggree on the contract', () => {
     let currentSellerBalance = web3.eth.getBalance(seller).toNumber()
     let inst
     return Escrow.deployed().then((instance) => {
@@ -46,7 +47,7 @@ contract('Escrow', function (accounts) {
 contract('EscrowFactory', accounts => {
   const buyer = accounts[6]
   const seller = accounts[5]
-  it("should create generate new contract", function () {
+  it.skip("should create generate new contract", function () {
     let fi
     let event
     return EscrowFactory.deployed().then((instance) => {
