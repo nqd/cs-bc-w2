@@ -132,29 +132,43 @@ async function renderStore() {
   product = await i.getProduct.call(1)
   $("#product-list").append(buildProduct(product))
 }
+function createBuyButton(product){
+  const buyButton = document.createElement('button');
+  buyButton.className = 'button';
+  buyButton.onclick = function() {
+    alert($(`quantity${product[0]}`).val)
+  }
+  buyButton.id = `button${product[0]}`;
+  return buyButton;
+}
 
-function buildProduct(p) {
-  return `
-  <div class="col-md-12">
-  <div class="card mb-8 box-shadow">
-    <div class="card-body">
-      <p class="card-text">${p[1]}</p>
-    </div>
-    <img class="card-img-top" src="http://localhost:8080/ipfs/${p[3]}" height="420" alt="Card image cap">
-    <div class="card-body">
-      <p class="card-text">Category: ${p[4]}</p>
-    </div>
-    <div class="card-body">
-      <p class="card-text">Product status: ${p[6]}</p>
-    </div>
-    <div class="card-body">
-      <input type="name" class="col-xs-1" class="number" placeholder="Buyer ID">
-      <button type="button" class="btn btn-primary buy-button">buy for ${web3.fromWei(p[5])} Eth</button>
-    </div
-  </div>
-  <hr>
-  </div>
-  `
+function createInputQuantity(product){
+  const inputQuantity = document.createElement('input');
+  inputQuantity.type = 'text';
+  inputQuantity.className = 'form-control';
+  inputQuantity.id = `quantity${product[0]}`;
+  return inputQuantity;
+}
+function createProductImg (product){
+  const img = document.createElement('img');
+  img.src = `http://localhost:8080/ipfs/${product[3]}`;
+  img.className = 'card-img-top';
+  return img;
+}
+function createProductTitle(product){
+  const productTitle = document.createElement('p');
+  productTitle.className = 'card-text';
+  productTitle.text = product[1];
+  return productTitle
+}
+function buildProduct(product) {
+  const productElement = document.createElement('div');
+  productElement.className = 'card mb-8 box-shadow';
+  productElement.appendChild(createBuyButton(product));
+  productElement.appendChild(createProductTitle(product));
+  productElement.appendChild(createProductImg(product));
+  productElement.appendChild(createInputQuantity(product));
+  return productElement
 }
 
 let createEscrow = async function () {
