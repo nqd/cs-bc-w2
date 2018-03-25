@@ -135,10 +135,11 @@ async function renderStore() {
 function createBuyButton(product){
   const buyButton = document.createElement('button');
   buyButton.className = 'btn btn-primary';
-  buyButton.onclick = function() {
-    const quantity = document.getElementById(`quantity${product[0]}`).value
-    
-    alert(quantity)
+  buyButton.onclick = async function() {
+    // const quantity = document.getElementById(`quantity${product[0]}`).value
+    const ownerId = parseInt($('#provider-id').val())
+    console.log('owner', ownerId)
+    await createEscrow(ownerId, product);
   }
   buyButton.id = `button${product[0]}`;
   buyButton.innerText='Buy'
@@ -176,14 +177,18 @@ function buildProduct(product) {
   return productElement
 }
 
-let createEscrow = async function () {
+let createEscrow = async function (ownerId, sellerId, product) {
+  console.log(product, 'product')
   var amount = parseInt($("#amount").val());
   var seller = $("#seller").val();
 
-  this.setStatus("Creating escrow contract... (please wait)");
+  // this.setStatus("Creating escrow contract... (please wait)");
 
-  let instance = await EscrowFactory.deployed();
-  let createdContract = await instance.createEscrow(seller, { from: account, gas: 1000000, value: web3.toWei(amount, 'ether') });
+  let instance = await EscrowFactory.deployed(
+    {from: ownerId}
+  );
+  let createdContract = await instance.createEscrow(
+    product, { from: account, gas: 1000000, value: web3.toWei(amount, 'ether') });
 
   // Update UI status here.
 }

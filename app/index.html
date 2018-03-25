@@ -9,8 +9,8 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="./app.js"></script>
   <script>
-    $('document').ready(()=> {
-      $('.buy-button').on('click',() => {
+    $('document').ready(() => {
+      $('.buy-button').on('click', () => {
         alert('buy')
       })
     })
@@ -27,6 +27,14 @@
 
   <div class="album text-muted">
     <div class="container">
+      <h1>Owner of Escrow Service:</h1>
+      <p>
+        <input type="text" class="col-xs-1" id="provider-id" />
+      </p>
+    </div>
+
+    <div class="container">
+      <h1>Stores</h1>
 
       <div class="row" id="product-list">
       </div>
