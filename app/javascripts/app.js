@@ -130,10 +130,17 @@ function buildProduct(p) {
   return `
   <div class="col-md-12">
   <div class="card mb-4 box-shadow">
+    <div class="card-body">
+      <p class="card-text">${p[1]}</p>
+    </div>
     <img class="card-img-top" src="http://localhost:8080/ipfs/${p[3]}" alt="Card image cap">
     <div class="card-body">
-      <p class="card-text">${p[4]}</p>
+      <p class="card-text">Category: ${p[4]}</p>
     </div>
+    <div class="card-body">
+      <p class="card-text">Buy for ${web3.fromWei(p[5])} Eth</p>
+    </div>
+    <hr>
   </div>
   </div>
   `
