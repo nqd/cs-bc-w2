@@ -29,6 +29,13 @@ const ipfs = ipfsAPI({
 var accounts;
 var account;
 
+function buyThisProduct(id) {
+  alert('product id', id)
+}
+function myFunction(id) {
+  alert('product id', id)
+}
+
 window.App = {
   start: function () {
     var self = this;
@@ -129,7 +136,7 @@ async function renderStore() {
 function buildProduct(p) {
   return `
   <div class="col-md-12">
-  <div class="card mb-4 box-shadow">
+  <div class="card mb-8 box-shadow">
     <div class="card-body">
       <p class="card-text">${p[1]}</p>
     </div>
@@ -141,10 +148,11 @@ function buildProduct(p) {
       <p class="card-text">Product status: ${p[6]}</p>
     </div>
     <div class="card-body">
-      <p class="card-text">Buy for ${web3.fromWei(p[5])} Eth</p>
-    </div>
-    <hr>
+      <input type="name" class="col-xs-1" class="number" placeholder="Buyer ID">
+      <button type="button" class="btn btn-primary buy-button">buy for ${web3.fromWei(p[5])} Eth</button>
+    </div
   </div>
+  <hr>
   </div>
   `
 }
