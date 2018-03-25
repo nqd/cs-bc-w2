@@ -1,7 +1,7 @@
 pragma solidity ^0.4.17;
 
 contract Store {
-    enum ProductStatus { Sold, Unsold, Buying }
+    enum ProductStatus { Sold, Unsold }
     uint public productIndex;
 
     mapping(address => mapping(uint => Product)) stores;
@@ -44,9 +44,13 @@ contract Store {
     }
 
     function getProduct(uint _id) view public returns (
-        uint, string, string, string, string, uint, ProductStatus
+        uint, string, string, string, string, uint, string
     ) {
         Product memory p = stores[productIdInStore[_id]][_id];
+        string memory status = "Sold";
+        if (p.status == ProductStatus.Unsold) {
+            status = "Unsold";
+        }
         return (
             p.id,
             p.name,
@@ -54,7 +58,7 @@ contract Store {
             p.imageLink,
             p.description,
             p.price,
-            p.status
+            status
         );
     }
 }

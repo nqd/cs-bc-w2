@@ -120,9 +120,9 @@ function saveImageOnIpfs(reader) {
 async function renderStore() {
   console.log("render store")
   let i = await Store.deployed();
-  let product = await i.getProduct.call(3)
+  let product = await i.getProduct.call(0)
   $("#product-list").append(buildProduct(product))
-  product = await i.getProduct.call(4)
+  product = await i.getProduct.call(1)
   $("#product-list").append(buildProduct(product))
 }
 
@@ -133,9 +133,12 @@ function buildProduct(p) {
     <div class="card-body">
       <p class="card-text">${p[1]}</p>
     </div>
-    <img class="card-img-top" src="http://localhost:8080/ipfs/${p[3]}" alt="Card image cap">
+    <img class="card-img-top" src="http://localhost:8080/ipfs/${p[3]}" height="420" alt="Card image cap">
     <div class="card-body">
       <p class="card-text">Category: ${p[4]}</p>
+    </div>
+    <div class="card-body">
+      <p class="card-text">Product status: ${p[6]}</p>
     </div>
     <div class="card-body">
       <p class="card-text">Buy for ${web3.fromWei(p[5])} Eth</p>
