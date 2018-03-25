@@ -134,11 +134,14 @@ async function renderStore() {
 }
 function createBuyButton(product){
   const buyButton = document.createElement('button');
-  buyButton.className = 'button';
+  buyButton.className = 'btn btn-primary';
   buyButton.onclick = function() {
-    alert($(`quantity${product[0]}`).val)
+    const quantity = document.getElementById(`quantity${product[0]}`).value
+    
+    alert(quantity)
   }
   buyButton.id = `button${product[0]}`;
+  buyButton.innerText='Buy'
   return buyButton;
 }
 
@@ -153,21 +156,23 @@ function createProductImg (product){
   const img = document.createElement('img');
   img.src = `http://localhost:8080/ipfs/${product[3]}`;
   img.className = 'card-img-top';
+  img.width=100;
+
   return img;
 }
 function createProductTitle(product){
   const productTitle = document.createElement('p');
   productTitle.className = 'card-text';
-  productTitle.text = product[1];
+  productTitle.innerHTML = product[1];
   return productTitle
 }
 function buildProduct(product) {
   const productElement = document.createElement('div');
   productElement.className = 'card mb-8 box-shadow';
-  productElement.appendChild(createBuyButton(product));
   productElement.appendChild(createProductTitle(product));
   productElement.appendChild(createProductImg(product));
   productElement.appendChild(createInputQuantity(product));
+  productElement.appendChild(createBuyButton(product));
   return productElement
 }
 
