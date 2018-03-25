@@ -121,7 +121,8 @@ async function renderStore() {
   console.log("render store")
   let i = await Store.deployed();
   let product = await i.getProduct.call(3)
-  console.log(product)
+  $("#product-list").append(buildProduct(product))
+  product = await i.getProduct.call(4)
   $("#product-list").append(buildProduct(product))
 }
 
