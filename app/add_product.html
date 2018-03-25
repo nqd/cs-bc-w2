@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Add product</title>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="./app.js"></script>
+</head>
+
+<body>
+  <form id="add-product-form">
+    <div class="form-group">
+      <label for="product-name">Product Name</label>
+      <input type="Name" class="form-control" id="product-name" placeholder="Enter name">
+      <small class="form-text text-muted">Product Name.</small>
+    </div>
+
+    <div class="form-group">
+      <label for="product-image" class="control-label">Upload product photo</label>
+      <div>
+        <input type="file" name="product-image" class="form-control" id="product-image" placeholder="Password">
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</body>
+
+</html>

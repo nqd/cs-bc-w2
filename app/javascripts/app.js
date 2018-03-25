@@ -15,6 +15,14 @@ var EscrowFactory = contract(escrow_artifacts);
 var Escrow = contract(escrow_contract);
 var Store = contract(store_artifacts)
 
+const ipfsAPI = require('ipfs-api');
+const ethUtil = require('ethereumjs-util');
+const ipfs = ipfsAPI({
+  host: 'localhost',
+  port: '5001',
+  protocol: 'http'
+});
+
 // The following code is simple to show off interacting with your contracts.
 // As your needs grow you will likely need to change its form and structure.
 // For application bootstrapping, check out window.addEventListener below.
@@ -62,19 +70,63 @@ window.App = {
     $('#create-escrow').on('click', function (e) {
       createEscrow();
     });
+
+    let reader;
+    $("#product-image").on("change", (event) => {
+      const file = event.target.files[0];
+      console.log('file', file)
+      reader = new window.FileReader();
+      reader.readAsArrayBuffer(file)
+    })
+
+    $("#add-product-form").on("submit", e => {
+      console.log(reader)
+      e.preventDefault();
+      saveProduct(reader, $("#product-name").val());
+    })
   },
 };
+
+async function saveProduct(fileReader, productName) {
+  let response = await saveImageOnIpfs(fileReader);
+  let imageId = response[0].hash;
+
+  let i = await Store.deployed();
+  let res = await i.addProduct(
+    productName,
+    "category",
+    imageId,
+    "description",
+    web3.toWei(1, "ether"),
+    { from: web3.eth.accounts[0], gas: 4700000 }
+  );
+
+  alert("product added");
+}
+function saveImageOnIpfs(reader) {
+  const buffer = Buffer.from(reader.result);
+  return ipfs.add(buffer)
+}
 
 async function renderStore() {
   console.log("render store")
   let i = await Store.deployed();
-  let product = await i.getProduct.call(1)
+  let product = await i.getProduct.call(2)
   console.log(product)
   $("#product-list").append(buildProduct(product))
 }
 
 function buildProduct(p) {
-  return `<div><h1>${p[1]}</h1></div>`
+  return `
+  <div class="col-md-12">
+  <div class="card mb-4 box-shadow">
+    <img class="card-img-top" src="http://localhost:8080/ipfs/${p[3]}" alt="Card image cap">
+    <div class="card-body">
+      <p class="card-text">${p[4]}</p>
+    </div>
+  </div>
+  </div>
+  `
 }
 
 let createEscrow = async function () {
