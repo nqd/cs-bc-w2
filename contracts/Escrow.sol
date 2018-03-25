@@ -52,7 +52,9 @@ contract Escrow {
     }
 
     function release() internal {
-        provider.transfer(this.balance / 100); // 1% fee
-        selfdestruct(seller);
+        uint balance = this.balance;
+        provider.transfer(balance / 100); // 1% fee
+        seller.transfer(balance * 99 / 100);
+        // selfdestruct(seller);
     }
 }

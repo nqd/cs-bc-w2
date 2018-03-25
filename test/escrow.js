@@ -6,7 +6,7 @@ contract('Escrow', function (accounts) {
   const buyer = accounts[6]
   const seller = accounts[5]
 
-  it("should create new contract", function () {
+  it.skip("should create new contract", function () {
     let inst
     return Escrow.deployed().then(function (instance) {
       inst = instance
@@ -35,11 +35,12 @@ contract('Escrow', function (accounts) {
       // seller accept
       return inst.accept(true, { from: seller })
     }).then(_instance => {
-      inst.accept(true, { from: buyer }).then(() => {
-        return inst
-      })
+      return inst.accept(true, { from: buyer })
     }).then(_instance => {
-      expect(web3.eth.getBalance(seller).toNumber(), currentSellerBalance + web3.toWei(1))
+      // console.log(web3.eth.getBalance(seller).toNumber(),'current seller balance')
+      // console.log(currentSellerBalance, 'last seller balance')
+      // console.log(web3.toWei(1), 'transit')
+      assert.equal(web3.eth.getBalance(seller).toNumber(), currentSellerBalance + web3.toWei(1))
     })
   })
 })
